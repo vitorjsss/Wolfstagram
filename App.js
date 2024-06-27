@@ -1,13 +1,11 @@
-import { StatusBar } from 'expo-status-bar';
-import { StyleSheet, View } from 'react-native';
-import AppForm from './components/AppForm';
-import { ScrollView } from 'react-native';
+import React from 'react';
+import { ScrollView, StyleSheet } from 'react-native';
+import HomeScreen from './components/HomeScreen';
 
 export default function App() {
   return (
     <ScrollView contentContainerStyle={styles.container}>
-      <StatusBar barStyle={'light-content'} />
-      <AppForm />
+      <HomeScreen />
     </ScrollView>
   );
 }
@@ -16,8 +14,5 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     backgroundColor: '#fff',
-    alignItems: 'center',
-    justifyContent: 'center',
-
   },
 });
