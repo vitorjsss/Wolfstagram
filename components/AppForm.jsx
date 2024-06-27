@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React from 'react';
 import { Button, View, Text, StyleSheet } from 'react-native';
 import { Formik } from 'formik';
 import * as Yup from 'yup';
@@ -7,102 +7,89 @@ import DatePickerField from './DatePickerField';
 
 const validationSchema = Yup.object().shape({
     email: Yup.string().required().email().label("Email"),
-    password: Yup.string().required().min(4).label("Password")
+    password: Yup.string().required().min(4).label("Password"),
+    confirmPassword: Yup.string()
+        .oneOf([Yup.ref('password'), null], 'As senhas devem ser iguais')
+        .required('O preenchimento deste campo é obrigatório')
+        .label("Confirm Password"),
+    name: Yup.string().required().label("Name"),
+    birthday: Yup.string().required().label("Birthday"),
+    breed: Yup.string().required().label("Breed"),
+    favoriteToy: Yup.string().required().label("Favorite Toy")
 });
 
-export const AppForm = props => {
-    const [email, setEmail] = useState('');
-    const [password, setPassword] = useState('');
-    const [name, setName] = useState('');
-    const [confirmPassword, setConfirmPassword] = useState('');
-    const [birthday, setBirthday] = useState('');
-    const [breed, setBreed] = useState('');
-    const [favoriteToy, setFavoriteToy] = useState('');
-
+export const AppForm = () => {
     return (
         <Formik
-            initialValues={{ email: '', password: '', confirmPassword: '', name: '', birthday: '', breed: '', favoriteToy: '' }}
-            onSubmit={values => console.log(values)}
+            initialValues={{
+                email: '',
+                password: '',
+                name: '',
+                birthday: '',
+                breed: '',
+                favoriteToy: ''
+            }}
+            onSubmit={(values, { resetForm }) => {
+                console.log(values);
+                resetForm();
+            }}
             validationSchema={validationSchema}
         >
             {({ handleChange, handleSubmit, setFieldValue, values, errors, touched }) => (
                 <View>
                     <AppInputField
                         label='Email: '
-                        value={email}
+                        value={values.email}
                         placeholder='Insira o seu email'
-                        onChangeText={text => {
-                            setEmail(text);
-                            handleChange('email')(text);
-                        }}
+                        onChangeText={handleChange('email')}
                         secure={false}
                     />
                     {touched.email && errors.email && <Text style={styles.errorText}>{errors.email}</Text>}
 
                     <AppInputField
                         label='Senha: '
-                        value={password}
-                        placeholder='Insira sua senha' onChangeText={text => {
-                            setPassword(text);
-                            handleChange('password')(text);
-                        }}
+                        value={values.password}
+                        placeholder='Insira sua senha'
+                        onChangeText={handleChange('password')}
                         secure={true}
                     />
                     {touched.password && errors.password && <Text style={styles.errorText}>{errors.password}</Text>}
 
                     <AppInputField
                         label='Confirmar Senha: '
-                        value={confirmPassword}
                         placeholder='Insira sua senha novamente'
-                        onChangeText={text => {
-                            setConfirmPassword(text);
-                            (text);
-                        }}
-                        onSubmitEditing={(e) => {
-                            confirmPasswordsMatch(e.nativeEvent.text, password);
-                        }}
+                        onChangeText={handleChange('confirmPassword')}
                         secure={true}
                     />
+                    {touched.confirmPassword && errors.confirmPassword && <Text style={styles.errorText}>{errors.confirmPassword}</Text>}
 
                     <AppInputField
                         label='Nome: '
-                        value={name}
+                        value={values.name}
                         placeholder='Insira o nome do seu cachorro'
-                        onChangeText={text => {
-                            setName(text);
-                            handleChange('name')(text);
-                        }}
+                        onChangeText={handleChange('name')}
                         secure={false}
                     />
 
                     <DatePickerField
                         label='Aniversário do seu pet: '
-                        value={birthday}
-                        onChangeText={date => {
-                            setBirthday(date);
-                            setFieldValue('birthday', date);
-                        }}
+                        value={values.birthday}
+                        onChangeText={date => setFieldValue('birthday', date)}
                     />
 
                     <AppInputField
                         label='Raça: '
-                        value={breed}
+                        value={values.breed}
                         placeholder='Insira a raça do seu cachorro'
-                        onChangeText={text => {
-                            setBreed(text);
-                            handleChange('breed')(text);
-                        }}
+                        onChangeText={handleChange('breed')}
                         secure={false}
                     />
 
                     <AppInputField
                         label='Brinquedo Favorito: '
-                        value={favoriteToy}
+                        value={values.favoriteToy}
                         placeholder='Insira o brinquedo favorito do seu cachorro'
-                        onChangeText={text => {
-                            setFavoriteToy(text);
-                            handleChange('favoriteToy')(text);
-                        }}
+                        onChangeText={handleChange('favoriteToy')}
                         secure={false}
                     />
 
@@ -112,12 +99,6 @@ export const AppForm = props => {
         </Formik>
     );
 };
-
-function confirmPasswordsMatch(confirmation, original) {
-    if (confirmation !== original) {
-        alert('Passwords do not match, please try again.');
-    }
-}
 
 const styles = StyleSheet.create({
     errorText: {

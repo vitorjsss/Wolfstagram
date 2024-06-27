@@ -6,7 +6,7 @@ const AppInputField = (props) => {
         <View style={styles.inputContainer}>
             <Text style={styles.label}>{props.label}</Text>
             <TextInput
-                secureTextEntry={props.secure} // Usa a prop 'secure' para campos de senha
+                secureTextEntry={props.secure}
                 autoCapitalize='none'
                 autoCorrect={false}
                 onChangeText={props.onChangeText}
