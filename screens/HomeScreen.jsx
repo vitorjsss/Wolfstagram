@@ -1,6 +1,6 @@
 import React from 'react';
 import { ScrollView, StyleSheet } from 'react-native';
-import WoofPost from './WoofPost';
+import WoofPost from '../components/WoofPost';
 
 const data = {
     woofs: [
