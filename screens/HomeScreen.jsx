@@ -1,11 +1,9 @@
 import React from 'react';
-import { ScrollView, StyleSheet } from 'react-native';
-import WoofPost from '../components/WoofPost';
-import Avatar from '../components/Avatar';
+import { ScrollView, StyleSheet, FlatList } from 'react-native';
 import Heading from '../components/Heading';
-import Title from '../components/Title';
 import WoofPost from '../components/WoofPost';
 import WoofCard from '../components/WoofCard';
+
 const data = {
     woofs: [
         {
