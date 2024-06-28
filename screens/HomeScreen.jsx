@@ -1,7 +1,11 @@
 import React from 'react';
 import { ScrollView, StyleSheet } from 'react-native';
 import WoofPost from '../components/WoofPost';
-
+import Avatar from '../components/Avatar';
+import Heading from '../components/Heading';
+import Title from '../components/Title';
+import WoofPost from '../components/WoofPost';
+import WoofCard from '../components/WoofCard';
 const data = {
     woofs: [
         {
@@ -92,9 +96,19 @@ const data = {
     ],
 };
 
-const HomeScreen = (props) => {
+const HomeScreen = () => {
     return (
         <ScrollView contentContainerStyle={styles.container}>
+            <Heading>Trending Woofs</Heading>
+            <FlatList
+                data={data.woofs}
+                renderItem={({ item }) => <WoofCard name={item.name} avatarUrl={item.avatar} />}
+                keyExtractor={item => item.id}
+                horizontal={true}
+                showsHorizontalScrollIndicator={false}
+                contentContainerStyle={styles.woofList}
+            />
+            <Heading>New Posts</Heading>
             {data.posts.map(post => (
                 <WoofPost
                     key={post.id}
@@ -111,7 +125,11 @@ const styles = StyleSheet.create({
     container: {
         flexGrow: 1,
         padding: 10,
-    }
+    },
+    woofList: {
+        flexDirection: 'row',
+        alignItems: 'center',
+    },
 });
 
 export default HomeScreen;
